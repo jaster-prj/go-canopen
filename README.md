@@ -1,6 +1,6 @@
 # go-canopen
 
-[![main CI](https://github.com/jaster-prj/go-canopen/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jaster-prj/go-canopen/actions/workflows/ci.yml)
+![GitHub Release](https://img.shields.io/github/v/release/jaster-prj/go-canopen)[![main CI](https://github.com/jaster-prj/go-canopen/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jaster-prj/go-canopen/actions/workflows/ci.yml)
 
 Implement canopen protocol with [https://github.com/angelodlfrtr/go-can](https://github.com/angelodlfrtr/go-can)
 
