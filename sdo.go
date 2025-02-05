@@ -26,29 +26,29 @@ const (
 
 // SDOClient represent an SDO client
 type SDOClient struct {
-	Node      *Node
+	Node      INode
 	RXCobID   uint32
 	TXCobID   uint32
 	SendQueue []string
 }
 
-func NewSDOClient(node *Node) *SDOClient {
+func NewSDOClient(node INode) *SDOClient {
 	return &SDOClient{
 		Node:      node,
-		RXCobID:   uint32(0x600 + node.ID),
-		TXCobID:   uint32(0x580 + node.ID),
+		RXCobID:   uint32(0x600 + node.GetId()),
+		TXCobID:   uint32(0x580 + node.GetId()),
 		SendQueue: []string{},
 	}
 }
 
 // SendRequest to network bus
 func (sdoClient *SDOClient) SendRequest(req []byte) error {
-	return sdoClient.Node.Network.Send(sdoClient.RXCobID, req)
+	return sdoClient.Node.Send(sdoClient.RXCobID, req)
 }
 
 // FindName find an sdo object from object dictionary by name
 func (sdoClient *SDOClient) FindName(name string) DicObject {
-	if ob := sdoClient.Node.ObjectDic.FindName(name); ob != nil {
+	if ob := sdoClient.Node.FindName(name); ob != nil {
 		ob.SetSDO(sdoClient)
 		return ob
 	}
@@ -83,12 +83,22 @@ func (sdoClient *SDOClient) Send(
 		retryCount = &rtc
 	}
 
-	framesChan := sdoClient.Node.Network.AcquireFramesChan(expectFunc)
+	var expectSdoFunc networkFramesChanFilterFunc
+	if expectFunc != nil {
+		expectSdoFilterFunc := func(frm *can.Frame) bool {
+			arbitrationId := frm.ArbitrationID
+			if arbitrationId != sdoClient.TXCobID {
+				return false
+			}
+			return (*expectFunc)(frm)
+		}
+		expectSdoFunc = &expectSdoFilterFunc
+	}
+	framesChan := sdoClient.Node.AcquireFramesChanFromNetwork(expectSdoFunc)
+	defer sdoClient.Node.ReleaseFramesChanFromNetwork(framesChan.ID)
 
 	// Retry loop
 	remainingCount := *retryCount
-	var frm *can.Frame
-
 	for {
 		if remainingCount == 0 {
 			break
@@ -100,32 +110,27 @@ func (sdoClient *SDOClient) Send(
 
 		timer := time.NewTimer(*timeout)
 
-		select {
-		case <-timer.C:
-			// Double timeout for each retry
-			newTimeout := *timeout * 2
-			timeout = &newTimeout
-		case fr := <-framesChan.C:
-			frm = fr
+		loop := true
+		for {
+			if !loop {
+				break
+			}
+			select {
+			case <-timer.C:
+				// Double timeout for each retry
+				newTimeout := *timeout * 2
+				timeout = &newTimeout
+				loop = false
+			case fr := <-framesChan.C:
+				return fr, nil
+			}
 		}
 
 		timer.Stop()
 		remainingCount--
-
-		if frm != nil {
-			break
-		}
 	}
 
-	// Release data chan
-	sdoClient.Node.Network.ReleaseFramesChan(framesChan.ID)
-
-	// If no frm, timeout execeded
-	if frm == nil {
-		return nil, errors.New("timeout execeded")
-	}
-
-	return frm, nil
+	return nil, errors.New("timeout execeded")
 }
 
 // Read sdo

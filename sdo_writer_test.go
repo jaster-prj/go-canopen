@@ -18,25 +18,25 @@ var (
 	sizeSmallData = uint32(4)
 )
 
-func getSDOClientMockExpeditedSuccess() *SDOClientMock {
-	client := &SDOClientMock{}
-	frame1 := can.Frame{Data: [8]byte{0x60, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
+func getSDOClientMockExpeditedSuccess() *sdoClientMock {
+	client := &sdoClientMock{RXCobID: 0x600, TXCobID: 0x580}
+	frame1 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x60, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
 	client.On("Send", []byte{0x23, 0xE8, 0x03, 0x02, 0x4C, 0x69, 0x6E, 0x65}).Return(&frame1, nil)
 	return client
 }
 
-func getSDOClientMockExpeditedFailed() *SDOClientMock {
-	client := &SDOClientMock{}
+func getSDOClientMockExpeditedFailed() *sdoClientMock {
+	client := &sdoClientMock{RXCobID: 0x600, TXCobID: 0x580}
 	client.On("Send", []byte{0x23, 0xE8, 0x03, 0x02, 0x4C, 0x69, 0x6E, 0x65}).Return(nil, errors.New("Failed to send frame"))
 	return client
 }
 
-func getSDOClientMockSegmentedSuccess() *SDOClientMock {
-	client := &SDOClientMock{}
-	frame1 := can.Frame{Data: [8]byte{0x60, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
-	frame2 := can.Frame{Data: [8]byte{0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
-	frame3 := can.Frame{Data: [8]byte{0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
-	frame4 := can.Frame{Data: [8]byte{0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
+func getSDOClientMockSegmentedSuccess() *sdoClientMock {
+	client := &sdoClientMock{RXCobID: 0x600, TXCobID: 0x580}
+	frame1 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x60, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
+	frame2 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
+	frame3 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
+	frame4 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
 	client.On("Send", []byte{0x21, 0xE8, 0x03, 0x02, 0x13, 0x00, 0x00, 0x00}).Return(&frame1, nil)
 	client.On("Send", []byte{0x00, 0x53, 0x69, 0x7A, 0x65, 0x4C, 0x6F, 0x6E}).Return(&frame2, nil)
 	client.On("Send", []byte{0x10, 0x67, 0x65, 0x72, 0x41, 0x73, 0x4F, 0x6E}).Return(&frame3, nil)
@@ -44,60 +44,72 @@ func getSDOClientMockSegmentedSuccess() *SDOClientMock {
 	return client
 }
 
-func getSDOClientMockSegmentedFailed1() *SDOClientMock {
-	client := &SDOClientMock{}
-	frame1 := can.Frame{Data: [8]byte{0x00, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
+func getSDOClientMockSegmentedFailed1() *sdoClientMock {
+	client := &sdoClientMock{RXCobID: 0x600, TXCobID: 0x580}
+	frame1 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x00, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
 	client.On("Send", []byte{0x21, 0xE8, 0x03, 0x02, 0x13, 0x00, 0x00, 0x00}).Return(&frame1, nil)
 	return client
 }
 
-func getSDOClientMockSegmentedFailed2() *SDOClientMock {
-	client := &SDOClientMock{}
-	frame1 := can.Frame{Data: [8]byte{0x60, 0xE8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
+func getSDOClientMockSegmentedFailed2() *sdoClientMock {
+	client := &sdoClientMock{RXCobID: 0x600, TXCobID: 0x580}
+	frame1 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x60, 0xE8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
 	client.On("Send", []byte{0x21, 0xE8, 0x03, 0x02, 0x13, 0x00, 0x00, 0x00}).Return(&frame1, nil)
 	return client
 }
 
-func getSDOClientMockSegmentedFailed3() *SDOClientMock {
-	client := &SDOClientMock{}
-	frame1 := can.Frame{Data: [8]byte{0x60, 0xE8, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00}}
+func getSDOClientMockSegmentedFailed3() *sdoClientMock {
+	client := &sdoClientMock{RXCobID: 0x600, TXCobID: 0x580}
+	frame1 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x60, 0xE8, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00}}
 	client.On("Send", []byte{0x21, 0xE8, 0x03, 0x02, 0x13, 0x00, 0x00, 0x00}).Return(&frame1, nil)
 	return client
 }
 
-func getSDOClientMockSegmentedFailed4() *SDOClientMock {
-	client := &SDOClientMock{}
-	frame1 := can.Frame{Data: [8]byte{0x60, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
-	frame2 := can.Frame{Data: [8]byte{0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
-	client.On("Send", []byte{0x21, 0xE8, 0x03, 0x02, 0x13, 0x00, 0x00, 0x00}).Return(&frame1, nil)
-	client.On("Send", []byte{0x00, 0x53, 0x69, 0x7A, 0x65, 0x4C, 0x6F, 0x6E}).Return(&frame2, nil)
-	return client
-}
-
-func getSDOClientMockSegmentedFailed5() *SDOClientMock {
-	client := &SDOClientMock{}
-	frame1 := can.Frame{Data: [8]byte{0x60, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
-	frame2 := can.Frame{Data: [8]byte{0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
+func getSDOClientMockSegmentedFailed4() *sdoClientMock {
+	client := &sdoClientMock{RXCobID: 0x600, TXCobID: 0x580}
+	frame1 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x60, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
+	frame2 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
 	client.On("Send", []byte{0x21, 0xE8, 0x03, 0x02, 0x13, 0x00, 0x00, 0x00}).Return(&frame1, nil)
 	client.On("Send", []byte{0x00, 0x53, 0x69, 0x7A, 0x65, 0x4C, 0x6F, 0x6E}).Return(&frame2, nil)
 	return client
 }
 
-type SDOClientMock struct {
+func getSDOClientMockSegmentedFailed5() *sdoClientMock {
+	client := &sdoClientMock{RXCobID: 0x600, TXCobID: 0x580}
+	frame1 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x60, 0xE8, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00}}
+	frame2 := can.Frame{ArbitrationID: 0x580, Data: [8]byte{0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
+	client.On("Send", []byte{0x21, 0xE8, 0x03, 0x02, 0x13, 0x00, 0x00, 0x00}).Return(&frame1, nil)
+	client.On("Send", []byte{0x00, 0x53, 0x69, 0x7A, 0x65, 0x4C, 0x6F, 0x6E}).Return(&frame2, nil)
+	return client
+}
+
+type sdoClientMock struct {
 	mock.Mock
+	RXCobID uint32
+	TXCobID uint32
 }
 
-func (s *SDOClientMock) FindName(name string) DicObject {
+// GetRxCobId returns RxCobId
+func (s *sdoClientMock) GetRxCobId() uint32 {
+	return s.RXCobID
+}
+
+// GetTxCobId returns RxCobId
+func (s *sdoClientMock) GetTxCobId() uint32 {
+	return s.TXCobID
+}
+
+func (s *sdoClientMock) FindName(name string) DicObject {
 	args := s.Called(name)
 	return args.Get(0).(DicObject)
 }
 
-func (s *SDOClientMock) Read(index uint16, subIndex uint8) ([]byte, error) {
+func (s *sdoClientMock) Read(index uint16, subIndex uint8) ([]byte, error) {
 	args := s.Called(index, subIndex)
 	return args.Get(0).([]byte), args.Error(1)
 }
 
-func (s *SDOClientMock) Send(req []byte, expectFunc networkFramesChanFilterFunc, timeout *time.Duration, retryCount *int) (*can.Frame, error) {
+func (s *sdoClientMock) Send(req []byte, expectFunc networkFramesChanFilterFunc, timeout *time.Duration, retryCount *int) (*can.Frame, error) {
 	args := s.Called(req)
 	argFrame := args.Get(0)
 	if argFrame == nil {
@@ -115,12 +127,12 @@ func (s *SDOClientMock) Send(req []byte, expectFunc networkFramesChanFilterFunc,
 	return returnFrame, args.Error(1)
 }
 
-func (s *SDOClientMock) SendRequest(req []byte) error {
+func (s *sdoClientMock) SendRequest(req []byte) error {
 	args := s.Called(req)
 	return args.Error(0)
 }
 
-func (s *SDOClientMock) Write(index uint16, subIndex uint8, forceSegment bool, data []byte) error {
+func (s *sdoClientMock) Write(index uint16, subIndex uint8, forceSegment bool, data []byte) error {
 	args := s.Called(index, subIndex, forceSegment, data)
 	return args.Error(0)
 }
@@ -220,7 +232,7 @@ func TestSDOWriter_buildRequestDownloadBuf(t *testing.T) {
 
 func TestSDOWriter_RequestDownload(t *testing.T) {
 	type fields struct {
-		SDOClientFunc func() *SDOClientMock
+		SDOClientFunc func() *sdoClientMock
 		Index         uint16
 		SubIndex      uint8
 		ForceSegment  bool

@@ -1,8 +1,8 @@
 {
-  "name": "CANOPENREST",
+  "name": "GoCanOpen",
   "image": "devcontainer-go-dev:latest",
   "runArgs": [
-    "--name=CANOPENREST_Devcontainer"
+    "--name=GoCanOpen_Devcontainer"
   ],
   "customizations": {
     // Configure properties specific to VS Code.
