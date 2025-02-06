@@ -3,7 +3,7 @@ package canopen
 import (
 	"time"
 
-	"github.com/angelodlfrtr/go-can"
+	"github.com/jaster-prj/go-can"
 )
 
 type ISDOClient interface {

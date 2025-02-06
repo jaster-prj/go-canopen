@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/angelodlfrtr/go-can"
-	"github.com/angelodlfrtr/go-can/transports"
+	"github.com/jaster-prj/go-can"
+	"github.com/jaster-prj/go-can/transports"
 	canopen "github.com/jaster-prj/go-canopen"
 )
 

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/angelodlfrtr/go-can"
 	"github.com/google/uuid"
+	"github.com/jaster-prj/go-can"
 )
 
 var NMTStates = map[int]string{

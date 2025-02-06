@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/angelodlfrtr/go-can"
 	"github.com/google/uuid"
+	"github.com/jaster-prj/go-can"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

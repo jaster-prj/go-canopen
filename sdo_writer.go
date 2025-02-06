@@ -3,7 +3,7 @@ package canopen
 import (
 	"encoding/binary"
 
-	"github.com/angelodlfrtr/go-can"
+	"github.com/jaster-prj/go-can"
 )
 
 type SDOWriter struct {
