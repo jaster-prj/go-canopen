@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"github.com/angelodlfrtr/go-can"
+	"github.com/jaster-prj/go-can"
 )
 
 type SDOReader struct {

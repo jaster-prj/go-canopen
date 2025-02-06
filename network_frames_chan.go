@@ -1,7 +1,7 @@
 package canopen
 
 import (
-	"github.com/angelodlfrtr/go-can"
+	"github.com/jaster-prj/go-can"
 )
 
 type networkFramesChanFilterFunc *(func(*can.Frame) bool)

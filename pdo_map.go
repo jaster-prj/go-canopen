@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/angelodlfrtr/go-can"
 	"github.com/google/uuid"
+	"github.com/jaster-prj/go-can"
 )
 
 const (

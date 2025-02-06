@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/angelodlfrtr/go-can"
 	"github.com/google/uuid"
+	"github.com/jaster-prj/go-can"
 	"github.com/jaster-prj/go-canopen/utils"
 )
 
@@ -192,7 +192,7 @@ func (network *Network) AcquireFramesChan(filterFunc networkFramesChanFilterFunc
 	frameChan := &NetworkFramesChan{
 		ID:     chanID,
 		Filter: filterFunc,
-		C:      make(chan *can.Frame),
+		C:      make(chan *can.Frame, 10),
 	}
 
 	// Append network.FramesChans

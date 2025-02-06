@@ -2,18 +2,9 @@ package canopen
 
 import (
 	"encoding/binary"
-	"time"
 
-	"github.com/angelodlfrtr/go-can"
+	"github.com/jaster-prj/go-can"
 )
-
-type ISDOClient interface {
-	FindName(name string) DicObject
-	Read(index uint16, subIndex uint8) ([]byte, error)
-	Send(req []byte, expectFunc networkFramesChanFilterFunc, timeout *time.Duration, retryCount *int) (*can.Frame, error)
-	SendRequest(req []byte) error
-	Write(index uint16, subIndex uint8, forceSegment bool, data []byte) error
-}
 
 type SDOWriter struct {
 	SDOClient    ISDOClient
