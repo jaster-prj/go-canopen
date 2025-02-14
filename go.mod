@@ -1,12 +1,12 @@
 module github.com/jaster-prj/go-canopen
 
-go 1.23.4
+go 1.25.7
 
 require (
 	github.com/google/uuid v1.6.0
 	github.com/jaster-prj/go-can v0.0.5
-	github.com/stretchr/testify v1.10.0
-	gopkg.in/ini.v1 v1.67.0
+	github.com/stretchr/testify v1.11.1
+	gopkg.in/ini.v1 v1.67.1
 )
 
 require (
